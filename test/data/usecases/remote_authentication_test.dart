@@ -1,5 +1,3 @@
-import 'package:ForDev/domain/entities/account_entity.dart';
-import 'package:ForDev/domain/usecases/usecases.dart';
 import 'package:faker/faker.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
