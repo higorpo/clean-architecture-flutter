@@ -14,11 +14,4 @@ class AuthenticationParams {
     @required this.email,
     @required this.secret,
   });
-
-  Map<String, dynamic> toJson() {
-    return {
-      'email': email,
-      'password': secret,
-    };
-  }
 }
