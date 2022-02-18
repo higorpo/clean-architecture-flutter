@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../components/components.dart';
 
+import 'components/components.dart';
 import 'login_presenter.dart';
 
 class LoginPage extends StatefulWidget {
@@ -47,54 +49,44 @@ class _LoginPageState extends State<LoginPage> {
                 Headline1(text: 'Login'),
                 Padding(
                   padding: const EdgeInsets.all(32),
-                  child: Form(
-                    child: Column(
-                      children: [
-                        StreamBuilder<String>(
-                          stream: widget.presenter.emailErrorStream,
-                          builder: (context, snapshot) {
-                            return TextFormField(
-                              decoration: InputDecoration(
-                                labelText: 'Email',
-                                icon: Icon(Icons.email, color: Theme.of(context).primaryColorLight),
-                                errorText: snapshot.data?.isEmpty == true ? null : snapshot.data,
-                              ),
-                              keyboardType: TextInputType.emailAddress,
-                              onChanged: widget.presenter.validateEmail,
-                            );
-                          },
-                        ),
-                        SizedBox(height: 20),
-                        StreamBuilder<String>(
-                          stream: widget.presenter.passwordErrorStream,
-                          builder: (context, snapshot) {
-                            return TextFormField(
-                              decoration: InputDecoration(
-                                labelText: 'Senha',
-                                icon: Icon(Icons.lock, color: Theme.of(context).primaryColorLight),
-                                errorText: snapshot.data?.isEmpty == true ? null : snapshot.data,
-                              ),
-                              obscureText: true,
-                              onChanged: widget.presenter.validatePassword,
-                            );
-                          },
-                        ),
-                        SizedBox(height: 40),
-                        StreamBuilder<bool>(
-                          stream: widget.presenter.isFormValidStream,
-                          builder: (context, snapshot) {
-                            return RaisedButton(
-                              child: Text('Entrar'.toUpperCase()),
-                              onPressed: snapshot.data == true ? widget.presenter.auth : null,
-                            );
-                          },
-                        ),
-                        FlatButton.icon(
-                          onPressed: () {},
-                          icon: Icon(Icons.person),
-                          label: Text('Criar conta'),
-                        )
-                      ],
+                  child: Provider(
+                    create: (_) => widget.presenter,
+                    child: Form(
+                      child: Column(
+                        children: [
+                          EmailInput(),
+                          SizedBox(height: 20),
+                          StreamBuilder<String>(
+                            stream: widget.presenter.passwordErrorStream,
+                            builder: (context, snapshot) {
+                              return TextFormField(
+                                decoration: InputDecoration(
+                                  labelText: 'Senha',
+                                  icon: Icon(Icons.lock, color: Theme.of(context).primaryColorLight),
+                                  errorText: snapshot.data?.isEmpty == true ? null : snapshot.data,
+                                ),
+                                obscureText: true,
+                                onChanged: widget.presenter.validatePassword,
+                              );
+                            },
+                          ),
+                          SizedBox(height: 40),
+                          StreamBuilder<bool>(
+                            stream: widget.presenter.isFormValidStream,
+                            builder: (context, snapshot) {
+                              return RaisedButton(
+                                child: Text('Entrar'.toUpperCase()),
+                                onPressed: snapshot.data == true ? widget.presenter.auth : null,
+                              );
+                            },
+                          ),
+                          FlatButton.icon(
+                            onPressed: () {},
+                            icon: Icon(Icons.person),
+                            label: Text('Criar conta'),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 )
