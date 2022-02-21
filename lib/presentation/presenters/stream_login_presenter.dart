@@ -25,6 +25,10 @@ class StreamLoginPresenter {
     _controller.add(_state);
   }
 
+  void validatePassword(String password) {
+    validation.validate(field: 'password', value: password);
+  }
+
   void dispose() {
     _controller.close();
   }
