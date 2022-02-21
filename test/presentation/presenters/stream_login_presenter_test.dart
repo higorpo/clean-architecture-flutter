@@ -36,6 +36,7 @@ void main() {
     mockValidation(value: 'any error');
 
     sut.emailErrorStream.listen(expectAsync1((error) => expect(error, 'any error')));
+    sut.isFormValidStream.listen(expectAsync1((isValid) => expect(isValid, false)));
 
     sut.validateEmail(email);
     sut.validateEmail(email);
