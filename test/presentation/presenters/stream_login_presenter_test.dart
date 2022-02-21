@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:ForDev/presentation/protocols/validation.dart';
 import 'package:faker/faker.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -27,10 +28,6 @@ class StreamLoginPresenter {
   void dispose() {
     _controller.close();
   }
-}
-
-abstract class Validation {
-  String validate({@required String field, @required String value});
 }
 
 class ValidationSpy extends Mock implements Validation {}
