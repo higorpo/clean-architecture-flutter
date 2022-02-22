@@ -6,7 +6,7 @@ void main() {
   EmailValidation sut;
 
   setUp(() {
-    sut = EmailValidation();
+    sut = EmailValidation('any_field');
   });
 
   test('Should return null if email is empty', () {
