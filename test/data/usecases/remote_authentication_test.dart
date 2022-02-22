@@ -44,7 +44,7 @@ void main() {
 
     verify(httpClient.request(
       url: url,
-      method: 'POST',
+      method: 'post',
       body: {
         'email': params.email,
         'password': params.secret,
