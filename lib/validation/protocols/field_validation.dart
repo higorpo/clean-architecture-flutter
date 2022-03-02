@@ -1,4 +1,4 @@
 abstract class FieldValidation {
-  String field;
+  String get field;
   String validate(String value);
 }
