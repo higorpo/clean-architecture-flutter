@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../helpers/errors/errors.dart';
+import '../../../helpers/helpers.dart';
 
 import '../login_presenter.dart';
 
@@ -15,7 +15,7 @@ class PasswordInput extends StatelessWidget {
       builder: (context, snapshot) {
         return TextFormField(
           decoration: InputDecoration(
-            labelText: 'Senha',
+            labelText: R.strings.password,
             icon: Icon(Icons.lock, color: Theme.of(context).primaryColorLight),
             errorText: snapshot.hasData ? snapshot.data.description : null,
           ),
