@@ -14,11 +14,15 @@ class RemoteAddAccount {
   RemoteAddAccount({@required this.httpClient, @required this.url});
 
   Future<void> add(AddAccountParams params) async {
-    await httpClient.request(
-      url: url,
-      method: 'post',
-      body: RemoteAddAccountParams.fromDomain(params).toJson(),
-    );
+    try {
+      await httpClient.request(
+        url: url,
+        method: 'post',
+        body: RemoteAddAccountParams.fromDomain(params).toJson(),
+      );
+    } on HttpError {
+      throw DomainError.unexpected;
+    }
   }
 }
 
