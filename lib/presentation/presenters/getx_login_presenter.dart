@@ -38,13 +38,13 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
 
   void validateEmail(String email) {
     _email = email;
-    _emailError.value = _validateField(field: 'email', value: email);
+    _emailError.value = _validateField('email');
     _validateForm();
   }
 
   void validatePassword(String password) {
     _password = password;
-    _passwordError.value = _validateField(field: 'password', value: password);
+    _passwordError.value = _validateField('password');
     _validateForm();
   }
 
@@ -52,8 +52,10 @@ class GetxLoginPresenter extends GetxController implements LoginPresenter {
     _isFormValid.value = _emailError.value == null && _passwordError.value == null && _email != null && _password != null;
   }
 
-  UIError _validateField({String field, String value}) {
-    final error = validation.validate(field: field, value: value);
+  UIError _validateField(String field) {
+    final formData = {'email': _email, 'password': _password};
+
+    final error = validation.validate(field: field, input: formData);
     switch (error) {
       case ValidationError.invalidField:
         return UIError.invalidField;

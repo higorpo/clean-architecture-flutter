@@ -11,7 +11,7 @@ class RequiredFieldValidation extends Equatable implements FieldValidation {
 
   RequiredFieldValidation(this.field);
 
-  ValidationError validate(String value) {
-    return value?.isNotEmpty == true ? null : ValidationError.requiredField;
+  ValidationError validate(Map input) {
+    return input[field]?.isNotEmpty == true ? null : ValidationError.requiredField;
   }
 }
