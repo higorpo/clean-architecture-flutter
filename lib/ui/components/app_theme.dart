@@ -4,6 +4,7 @@ ThemeData makeAppTheme() {
   const primaryColor = Color.fromRGBO(136, 14, 79, 1);
   const primaryColorDark = Color.fromRGBO(96, 0, 39, 1);
   const primaryColorLight = Color.fromRGBO(188, 71, 123, 1);
+  const secondaryColorDark = Color.fromRGBO(0, 37, 26, 1);
 
   return ThemeData(
     primaryColor: primaryColor,
@@ -11,6 +12,7 @@ ThemeData makeAppTheme() {
     primaryColorLight: primaryColorLight,
     accentColor: primaryColor,
     backgroundColor: Colors.white,
+    secondaryHeaderColor: secondaryColorDark,
     textTheme: TextTheme(
       headline1: TextStyle(
         fontSize: 30,
