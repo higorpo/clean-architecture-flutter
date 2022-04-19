@@ -5,6 +5,7 @@ import '../../components/components.dart';
 import '../../helpers/helpers.dart';
 
 import 'components/components.dart';
+import 'survey_viewmodel.dart';
 import 'surveys_presenter.dart';
 
 class SurveysPage extends StatelessWidget {
@@ -29,18 +30,31 @@ class SurveysPage extends StatelessWidget {
           }
         });
 
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20),
-          child: CarouselSlider(
-            items: [
-              SurveyItem(),
-            ],
-            options: CarouselOptions(
-              enlargeCenterPage: true,
-              aspectRatio: 1,
-            ),
-          ),
-        );
+        return StreamBuilder<List<SurveyViewModel>>(
+            stream: presenter.loadSurveysStream,
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Column(
+                  children: [
+                    Text(snapshot.error.toString()),
+                    RaisedButton(child: Text(R.strings.reload), onPressed: null),
+                  ],
+                );
+              }
+
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+                child: CarouselSlider(
+                  items: [
+                    SurveyItem(),
+                  ],
+                  options: CarouselOptions(
+                    enlargeCenterPage: true,
+                    aspectRatio: 1,
+                  ),
+                ),
+              );
+            });
       }),
     );
   }
