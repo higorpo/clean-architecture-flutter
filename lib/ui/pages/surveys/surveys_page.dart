@@ -37,7 +37,7 @@ class SurveysPage extends StatelessWidget {
                 return Column(
                   children: [
                     Text(snapshot.error.toString()),
-                    RaisedButton(child: Text(R.strings.reload), onPressed: null),
+                    RaisedButton(child: Text(R.strings.reload), onPressed: presenter.loadData),
                   ],
                 );
               }
