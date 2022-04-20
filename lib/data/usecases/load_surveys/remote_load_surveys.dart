@@ -9,14 +9,14 @@ import '../../models/models.dart';
 
 class RemoteLoadSurveys implements LoadSurveys {
   final String url;
-  final HttpClient<List<Map>> httpClient;
+  final HttpClient httpClient;
 
   RemoteLoadSurveys({@required this.url, @required this.httpClient});
 
   Future<List<SurveyEntity>> load() async {
     try {
       final response = await httpClient.request(url: url, method: 'get');
-      return response.map((map) => RemoteSurveyModel.fromJson(map).toEntity()).toList();
+      return response.map<SurveyEntity>((map) => RemoteSurveyModel.fromJson(map).toEntity()).toList();
     } on HttpError catch (error) {
       throw error == HttpError.forbidden ? DomainError.accessDenied : DomainError.unexpected;
     }
