@@ -1,9 +1,11 @@
-import 'package:ForDev/data/models/models.dart';
-import 'package:ForDev/domain/entities/entities.dart';
 import 'package:faker/faker.dart';
 import 'package:test/test.dart';
 import 'package:meta/meta.dart';
 import 'package:mockito/mockito.dart';
+
+import 'package:ForDev/domain/entities/entities.dart';
+import 'package:ForDev/domain/helpers/helpers.dart';
+import 'package:ForDev/data/models/models.dart';
 
 class LocalLoadSurveys {
   final FetchCacheStorage fetchCacheStorage;
@@ -12,6 +14,10 @@ class LocalLoadSurveys {
 
   Future<List<SurveyEntity>> load() async {
     final data = await fetchCacheStorage.fetch('surveys');
+
+    if (data.isEmpty) {
+      throw DomainError.unexpected;
+    }
 
     return data.map<SurveyEntity>((json) => LocalSurveyModel.fromJson(json).toEntity()).toList();
   }
@@ -58,5 +64,13 @@ void main() {
       SurveyEntity(id: data[0]['id'], question: data[0]['question'], dateTime: DateTime.utc(2020, 7, 20), didAnswer: false),
       SurveyEntity(id: data[1]['id'], question: data[1]['question'], dateTime: DateTime.utc(2019, 2, 2), didAnswer: true),
     ]);
+  });
+
+  test('Should throw UnexpectedError if cache is empty', () async {
+    mockFetch([]);
+
+    final future = sut.load();
+
+    expect(future, throwsA(DomainError.unexpected));
   });
 }
