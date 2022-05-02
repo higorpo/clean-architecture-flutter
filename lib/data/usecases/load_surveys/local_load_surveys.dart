@@ -19,7 +19,7 @@ class LocalLoadSurveys implements LoadSurveys {
         throw Exception();
       }
 
-      return data.map<SurveyEntity>((json) => LocalSurveyModel.fromJson(json).toEntity()).toList();
+      return _map(data);
     } catch (_) {
       throw DomainError.unexpected;
     }
@@ -29,9 +29,11 @@ class LocalLoadSurveys implements LoadSurveys {
     final data = await cacheStorage.fetch('surveys');
 
     try {
-      data.map<SurveyEntity>((json) => LocalSurveyModel.fromJson(json).toEntity()).toList();
+      _map(data);
     } catch (_) {
       await cacheStorage.delete('surveys');
     }
   }
+
+  List<SurveyEntity> _map(List<Map> list) => list.map<SurveyEntity>((json) => LocalSurveyModel.fromJson(json).toEntity()).toList();
 }
