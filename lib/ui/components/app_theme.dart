@@ -4,7 +4,10 @@ ThemeData makeAppTheme() {
   const primaryColor = Color.fromRGBO(136, 14, 79, 1);
   const primaryColorDark = Color.fromRGBO(96, 0, 39, 1);
   const primaryColorLight = Color.fromRGBO(188, 71, 123, 1);
+  const secondaryColor = Color.fromRGBO(0, 77, 64, 1);
   const secondaryColorDark = Color.fromRGBO(0, 37, 26, 1);
+  final disabledColor = Colors.grey[400];
+  final dividerColor = Colors.grey;
 
   return ThemeData(
     primaryColor: primaryColor,
@@ -12,6 +15,7 @@ ThemeData makeAppTheme() {
     primaryColorLight: primaryColorLight,
     accentColor: primaryColor,
     backgroundColor: Colors.white,
+    highlightColor: secondaryColor,
     secondaryHeaderColor: secondaryColorDark,
     textTheme: TextTheme(
       headline1: TextStyle(
@@ -39,5 +43,7 @@ ThemeData makeAppTheme() {
         borderRadius: BorderRadius.circular(20),
       ),
     ),
+    disabledColor: disabledColor,
+    dividerColor: dividerColor,
   );
 }
