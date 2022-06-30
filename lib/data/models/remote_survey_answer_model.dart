@@ -13,14 +13,14 @@ class RemoteSurveyAnswerModel {
   RemoteSurveyAnswerModel({this.image, @required this.answer, @required this.isCurrentAccountAnswered, @required this.percent});
 
   factory RemoteSurveyAnswerModel.fromJson(Map json) {
-    if (!json.keys.toSet().containsAll(['answer', 'isCurrentAccountAnswered', 'percent'])) {
+    if (!json.keys.toSet().containsAll(['answer', 'isCurrentAccountAnswer', 'percent'])) {
       throw HttpError.invalidData;
     }
 
     return RemoteSurveyAnswerModel(
       image: json['image'],
       answer: json['answer'],
-      isCurrentAccountAnswered: json['isCurrentAccountAnswered'],
+      isCurrentAccountAnswered: json['isCurrentAccountAnswer'],
       percent: json['percent'],
     );
   }
