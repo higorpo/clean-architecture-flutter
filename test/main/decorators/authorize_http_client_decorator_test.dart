@@ -9,11 +9,14 @@ import 'package:ForDev/main/decorators/decorators.dart';
 
 class FetchSecureCacheStorageSpy extends Mock implements FetchSecureCacheStorage {}
 
+class DeleteSecureCacheStorageSpy extends Mock implements DeleteSecureCacheStorage {}
+
 class HttpClientSpy extends Mock implements HttpClient {}
 
 void main() {
   AuthorizeHttpClientDecorator sut;
   FetchSecureCacheStorageSpy fetchSecureCacheStorage;
+  DeleteSecureCacheStorageSpy deleteSecureCacheStorage;
   HttpClient httpClient;
   String url;
   String method;
@@ -51,8 +54,13 @@ void main() {
 
   setUp(() {
     fetchSecureCacheStorage = FetchSecureCacheStorageSpy();
+    deleteSecureCacheStorage = DeleteSecureCacheStorageSpy();
     httpClient = HttpClientSpy();
-    sut = AuthorizeHttpClientDecorator(decoratee: httpClient, fetchSecureCacheStorage: fetchSecureCacheStorage);
+    sut = AuthorizeHttpClientDecorator(
+      decoratee: httpClient,
+      fetchSecureCacheStorage: fetchSecureCacheStorage,
+      deleteSecureCacheStorage: deleteSecureCacheStorage,
+    );
 
     url = faker.internet.httpUrl();
     method = faker.randomGenerator.string(10);
@@ -88,6 +96,7 @@ void main() {
     final future = sut.request(url: url, method: method, body: body);
 
     expect(future, throwsA(HttpError.forbidden));
+    verify(deleteSecureCacheStorage.deleteSecure('token')).called(1);
   });
 
   test('Should rethrow if decoratee throws', () async {
