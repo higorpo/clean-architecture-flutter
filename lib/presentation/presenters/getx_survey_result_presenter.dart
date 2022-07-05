@@ -1,11 +1,11 @@
 import 'package:get/get.dart';
 import 'package:meta/meta.dart';
 
-import 'package:ForDev/domain/helpers/helpers.dart';
-import 'package:ForDev/domain/usecases/usecases.dart';
+import '../../domain/helpers/helpers.dart';
+import '../../domain/usecases/usecases.dart';
 
-import 'package:ForDev/ui/helpers/helpers.dart';
-import 'package:ForDev/ui/pages/pages.dart';
+import '../../ui/helpers/helpers.dart';
+import '../../ui/pages/pages.dart';
 
 class GetxSurveyResultPresenter implements SurveyResultPresenter {
   final LoadSurveyResult loadSurveyResult;
