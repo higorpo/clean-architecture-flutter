@@ -4,12 +4,13 @@ import 'package:provider/provider.dart';
 
 import '../../components/components.dart';
 import '../../helpers/helpers.dart';
+import '../../mixins/mixins.dart';
 
 import 'components/components.dart';
 import 'survey_viewmodel.dart';
 import 'surveys_presenter.dart';
 
-class SurveysPage extends StatelessWidget {
+class SurveysPage extends StatelessWidget with LoadingManager, NavigationManager, SessionManager {
   final SurveysPresenter presenter;
 
   const SurveysPage({@required this.presenter});
@@ -21,25 +22,9 @@ class SurveysPage extends StatelessWidget {
         title: Text(R.strings.surveys),
       ),
       body: Builder(builder: (context) {
-        presenter.isLoadingStream.listen((isLoading) {
-          if (isLoading == true) {
-            showLoading(context);
-          } else {
-            hideLoading(context);
-          }
-        });
-
-        presenter.navigateToStream.listen((page) {
-          if (page?.isNotEmpty == true) {
-            Get.toNamed(page);
-          }
-        });
-
-        presenter.isSessionExpiredStream.listen((isExpired) {
-          if (isExpired == true) {
-            Get.offAllNamed('/login');
-          }
-        });
+        handleLoading(context, presenter.isLoadingStream);
+        handleNavigation(presenter.navigateToStream);
+        handleSessionExpired(presenter.isSessionExpiredStream);
 
         presenter.loadData();
 
