@@ -29,4 +29,18 @@ class LocalSurveyAnswerModel {
         isCurrentAnswered: isCurrentAnswer,
         percent: percent,
       );
+
+  factory LocalSurveyAnswerModel.fromEntity(SurveyAnswerEntity entity) => LocalSurveyAnswerModel(
+        image: entity.image,
+        answer: entity.answer,
+        isCurrentAnswer: entity.isCurrentAnswered,
+        percent: entity.percent,
+      );
+
+  Map<String, String> toJson() => {
+        'image': image,
+        'answer': answer,
+        'isCurrentAnswer': isCurrentAnswer.toString(),
+        'percent': percent.toString(),
+      };
 }
