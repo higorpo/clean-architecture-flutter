@@ -3,34 +3,66 @@ import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
 import 'package:meta/meta.dart';
 
-import 'package:ForDev/data/usecases/load_survey_result/load_survey_result.dart';
+import 'package:ForDev/data/usecases/usecases.dart';
+import 'package:ForDev/domain/entities/entities.dart';
 
 class RemoteLoadSurveyResultWithLocalFallback {
   final RemoteLoadSurveyResult remote;
+  final LocalLoadSurveyResult local;
 
-  RemoteLoadSurveyResultWithLocalFallback({@required this.remote});
+  RemoteLoadSurveyResultWithLocalFallback({@required this.remote, @required this.local});
 
   Future<void> loadBySurvey({String surveyId}) async {
-    await remote.loadBySurvey(surveyId: surveyId);
+    final surveyResult = await remote.loadBySurvey(surveyId: surveyId);
+    await local.save(surveyId: surveyId, surveyResult: surveyResult);
   }
 }
 
 class RemoteLoadSurveyResultSpy extends Mock implements RemoteLoadSurveyResult {}
 
+class LocalLoadSurveyResultSpy extends Mock implements LocalLoadSurveyResult {}
+
 void main() {
   RemoteLoadSurveyResultWithLocalFallback sut;
   RemoteLoadSurveyResult remote;
+  LocalLoadSurveyResult local;
   String surveyId;
+  SurveyResultEntity surveyResult;
+
+  void mockSurveyResult() {
+    surveyResult = SurveyResultEntity(
+      surveyId: faker.guid.guid(),
+      question: faker.lorem.sentence(),
+      answers: [
+        SurveyAnswerEntity(
+          answer: faker.lorem.sentence(),
+          isCurrentAnswered: faker.randomGenerator.boolean(),
+          percent: faker.randomGenerator.integer(100),
+        ),
+      ],
+    );
+
+    when(remote.loadBySurvey(surveyId: anyNamed('surveyId'))).thenAnswer((_) async => surveyResult);
+  }
 
   setUp(() {
     surveyId = faker.guid.guid();
     remote = RemoteLoadSurveyResultSpy();
-    sut = RemoteLoadSurveyResultWithLocalFallback(remote: remote);
+    local = LocalLoadSurveyResultSpy();
+    sut = RemoteLoadSurveyResultWithLocalFallback(remote: remote, local: local);
+
+    mockSurveyResult();
   });
 
   test('Should call remote LoadBySurvey', () async {
     await sut.loadBySurvey(surveyId: surveyId);
 
     verify(remote.loadBySurvey(surveyId: surveyId)).called(1);
+  });
+
+  test('Should call local save with remote data', () async {
+    await sut.loadBySurvey(surveyId: surveyId);
+
+    verify(local.save(surveyId: surveyId, surveyResult: surveyResult)).called(1);
   });
 }
