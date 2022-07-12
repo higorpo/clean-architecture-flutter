@@ -1,3 +1,4 @@
+import 'package:ForDev/domain/helpers/helpers.dart';
 import 'package:faker/faker.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -32,21 +33,26 @@ void main() {
   String surveyId;
   SurveyResultEntity surveyResult;
 
-  void mockSurveyResult() {
-    surveyResult = SurveyResultEntity(
-      surveyId: faker.guid.guid(),
-      question: faker.lorem.sentence(),
-      answers: [
-        SurveyAnswerEntity(
-          answer: faker.lorem.sentence(),
-          isCurrentAnswered: faker.randomGenerator.boolean(),
-          percent: faker.randomGenerator.integer(100),
-        ),
-      ],
-    );
+  SurveyResultEntity mockSurveyResult() => SurveyResultEntity(
+        surveyId: faker.guid.guid(),
+        question: faker.lorem.sentence(),
+        answers: [
+          SurveyAnswerEntity(
+            answer: faker.lorem.sentence(),
+            isCurrentAnswered: faker.randomGenerator.boolean(),
+            percent: faker.randomGenerator.integer(100),
+          ),
+        ],
+      );
 
-    when(remote.loadBySurvey(surveyId: anyNamed('surveyId'))).thenAnswer((_) async => surveyResult);
+  PostExpectation mockRemoteCall() => when(remote.loadBySurvey(surveyId: anyNamed('surveyId')));
+
+  void mockRemoteLoad() {
+    surveyResult = mockSurveyResult();
+    mockRemoteCall().thenAnswer((_) async => surveyResult);
   }
+
+  void mockRemoteLoadError(DomainError error) => mockRemoteCall().thenThrow(error);
 
   setUp(() {
     surveyId = faker.guid.guid();
@@ -54,7 +60,7 @@ void main() {
     local = LocalLoadSurveyResultSpy();
     sut = RemoteLoadSurveyResultWithLocalFallback(remote: remote, local: local);
 
-    mockSurveyResult();
+    mockRemoteLoad();
   });
 
   test('Should call remote LoadBySurvey', () async {
@@ -73,5 +79,13 @@ void main() {
     final response = await sut.loadBySurvey(surveyId: surveyId);
 
     expect(response, surveyResult);
+  });
+
+  test('Should rethrow if remote LoadBySurvey throws AccessDeniedError', () async {
+    mockRemoteLoadError(DomainError.accessDenied);
+
+    final future = sut.loadBySurvey(surveyId: surveyId);
+
+    expect(future, throwsA(DomainError.accessDenied));
   });
 }
