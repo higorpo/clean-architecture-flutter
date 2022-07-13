@@ -58,6 +58,8 @@ void main() {
     mockSaveSurveyResultCall().thenAnswer((_) async => saveResult);
   }
 
+  void mockSaveSurveyResultError(DomainError error) => mockSaveSurveyResultCall().thenThrow(error);
+
   setUp(() {
     surveyId = faker.guid.guid();
     answer = faker.lorem.sentence();
@@ -161,6 +163,15 @@ void main() {
           ),
         ),
       );
+
+      await sut.save(answer: answer);
+    });
+
+    test('Should emit correct events on failure', () async {
+      mockSaveSurveyResultError(DomainError.unexpected);
+
+      expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+      sut.surveyResultStream.listen(null, onError: expectAsync1((error) => expect(error, UIError.unexpected.description)));
 
       await sut.save(answer: answer);
     });

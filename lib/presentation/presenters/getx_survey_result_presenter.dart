@@ -56,23 +56,27 @@ class GetxSurveyResultPresenter extends GetxController implements SurveyResultPr
   Future<void> save({@required String answer}) async {
     _isLoading.value = true;
 
-    final surveyResult = await saveSurveyResult.save(answer: answer);
+    try {
+      final surveyResult = await saveSurveyResult.save(answer: answer);
 
-    _surveyResult.value = SurveyResultViewModel(
-      surveyId: surveyResult.surveyId,
-      question: surveyResult.question,
-      answers: surveyResult.answers
-          .map(
-            (answer) => SurveyAnswerViewModel(
-              image: answer.image,
-              answer: answer.answer,
-              isCurrentAnswered: answer.isCurrentAnswered,
-              percent: '${answer.percent}%',
-            ),
-          )
-          .toList(),
-    );
-
-    _isLoading.value = false;
+      _surveyResult.value = SurveyResultViewModel(
+        surveyId: surveyResult.surveyId,
+        question: surveyResult.question,
+        answers: surveyResult.answers
+            .map(
+              (answer) => SurveyAnswerViewModel(
+                image: answer.image,
+                answer: answer.answer,
+                isCurrentAnswered: answer.isCurrentAnswered,
+                percent: '${answer.percent}%',
+              ),
+            )
+            .toList(),
+      );
+    } on DomainError catch (_) {
+      _surveyResult.subject.addError(UIError.unexpected.description);
+    } finally {
+      _isLoading.value = false;
+    }
   }
 }
