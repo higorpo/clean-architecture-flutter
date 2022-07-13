@@ -175,5 +175,14 @@ void main() {
 
       await sut.save(answer: answer);
     });
+
+    test('Should emit correct events on access denied', () async {
+      mockSaveSurveyResultError(DomainError.accessDenied);
+
+      expectLater(sut.isLoadingStream, emitsInOrder([true, false]));
+      expectLater(sut.isSessionExpiredStream, emits(true));
+
+      await sut.save(answer: answer);
+    });
   });
 }

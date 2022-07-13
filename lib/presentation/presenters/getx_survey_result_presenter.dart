@@ -73,8 +73,12 @@ class GetxSurveyResultPresenter extends GetxController implements SurveyResultPr
             )
             .toList(),
       );
-    } on DomainError catch (_) {
-      _surveyResult.subject.addError(UIError.unexpected.description);
+    } on DomainError catch (error) {
+      if (error == DomainError.accessDenied) {
+        _isSessionExpired.value = true;
+      } else {
+        _surveyResult.subject.addError(UIError.unexpected.description);
+      }
     } finally {
       _isLoading.value = false;
     }
