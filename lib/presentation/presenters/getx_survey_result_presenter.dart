@@ -9,6 +9,7 @@ import '../../ui/pages/pages.dart';
 
 class GetxSurveyResultPresenter extends GetxController implements SurveyResultPresenter {
   final LoadSurveyResult loadSurveyResult;
+  final SaveSurveyResult saveSurveyResult;
   final String surveyId;
 
   final _isLoading = true.obs;
@@ -19,7 +20,7 @@ class GetxSurveyResultPresenter extends GetxController implements SurveyResultPr
   Stream<SurveyResultViewModel> get surveyResultStream => _surveyResult.stream;
   Stream<bool> get isSessionExpiredStream => _isSessionExpired.stream;
 
-  GetxSurveyResultPresenter({@required this.loadSurveyResult, @required this.surveyId});
+  GetxSurveyResultPresenter({@required this.loadSurveyResult, @required this.saveSurveyResult, @required this.surveyId});
 
   Future<void> loadData() async {
     _isLoading.value = true;
@@ -52,5 +53,7 @@ class GetxSurveyResultPresenter extends GetxController implements SurveyResultPr
     }
   }
 
-  Future<void> save({@required String answer}) async {}
+  Future<void> save({@required String answer}) async {
+    await saveSurveyResult.save(answer: answer);
+  }
 }
