@@ -32,7 +32,7 @@ class SurveyResultPage extends StatelessWidget with LoadingManager, SessionManag
               }
 
               if (snapshot.hasData) {
-                return SurveyResult(snapshot.data);
+                return SurveyResult(viewModel: snapshot.data, onSave: presenter.save);
               }
 
               return SizedBox(height: 0);

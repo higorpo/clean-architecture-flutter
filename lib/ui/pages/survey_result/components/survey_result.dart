@@ -6,10 +6,12 @@ import 'components.dart';
 
 class SurveyResult extends StatelessWidget {
   final SurveyResultViewModel viewModel;
+  final void Function({@required String answer}) onSave;
 
-  const SurveyResult(
-    this.viewModel, {
+  const SurveyResult({
     Key key,
+    @required this.viewModel,
+    @required this.onSave,
   }) : super(key: key);
 
   @override
@@ -20,7 +22,10 @@ class SurveyResult extends StatelessWidget {
           return SurveyHeader(question: viewModel.question);
         }
 
-        return SurveyAnswer(viewModel: viewModel.answers[index - 1]);
+        return GestureDetector(
+          onTap: () => onSave(answer: viewModel.answers[index - 1].answer),
+          child: SurveyAnswer(viewModel: viewModel.answers[index - 1]),
+        );
       },
       itemCount: viewModel.answers.length + 1,
     );

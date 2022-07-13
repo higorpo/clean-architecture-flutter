@@ -51,4 +51,6 @@ class GetxSurveyResultPresenter extends GetxController implements SurveyResultPr
       _isLoading.value = false;
     }
   }
+
+  Future<void> save({@required String answer}) async {}
 }
