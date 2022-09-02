@@ -19,7 +19,7 @@ class LocalSurveyModel {
       id: json['id'],
       question: json['question'],
       date: DateTime.parse(json['date']),
-      didAnswer: json['didAnswer'] == 'true',
+      didAnswer: json['didAnswer'].toLowerCase() == 'true',
     );
   }
 

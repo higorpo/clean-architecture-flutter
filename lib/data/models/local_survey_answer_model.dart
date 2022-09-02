@@ -18,7 +18,7 @@ class LocalSurveyAnswerModel {
     return LocalSurveyAnswerModel(
       image: json['image'],
       answer: json['answer'],
-      isCurrentAnswer: json['isCurrentAnswer'] == 'true',
+      isCurrentAnswer: json['isCurrentAnswer'].toLowerCase() == 'true',
       percent: int.parse(json['percent']),
     );
   }

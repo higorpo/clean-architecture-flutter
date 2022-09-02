@@ -9,6 +9,7 @@ import 'package:ForDev/ui/helpers/helpers.dart';
 import 'package:ForDev/ui/pages/pages.dart';
 import 'package:ForDev/ui/pages/survey_result/components/components.dart';
 
+import '../../mocks/fake_survey_result_factory.dart';
 import '../helpers/helpers.dart';
 
 class SurveyResultPresenterSpy extends Mock implements SurveyResultPresenter {}
@@ -47,15 +48,6 @@ void main() {
       await tester.pumpWidget(makePage(path: '/survey_result/any_survey_id', page: () => SurveyResultPage(presenter: presenter)));
     });
   }
-
-  SurveyResultViewModel makeSurveyResult() => SurveyResultViewModel(
-        surveyId: 'Any id',
-        question: 'Question',
-        answers: [
-          SurveyAnswerViewModel(image: 'Image 0', answer: 'Answer 0', isCurrentAnswered: true, percent: '60%'),
-          SurveyAnswerViewModel(answer: 'Answer 1', isCurrentAnswered: false, percent: '40%'),
-        ],
-      );
 
   tearDown(() {
     closeStreams();
@@ -114,7 +106,7 @@ void main() {
   testWidgets('Should present valid data if surveyResultStream succeeds', (WidgetTester tester) async {
     await loadPage(tester);
 
-    surveyResultController.add(makeSurveyResult());
+    surveyResultController.add(FakeSurveyResultFactory.makeViewModel());
 
     await provideMockedNetworkImages(() async {
       await tester.pump();
@@ -158,7 +150,7 @@ void main() {
   testWidgets('Should call save on list item click', (WidgetTester tester) async {
     await loadPage(tester);
 
-    surveyResultController.add(makeSurveyResult());
+    surveyResultController.add(FakeSurveyResultFactory.makeViewModel());
 
     await provideMockedNetworkImages(() async {
       await tester.pump();
@@ -172,7 +164,7 @@ void main() {
   testWidgets('Should not call save on current answer click', (WidgetTester tester) async {
     await loadPage(tester);
 
-    surveyResultController.add(makeSurveyResult());
+    surveyResultController.add(FakeSurveyResultFactory.makeViewModel());
 
     await provideMockedNetworkImages(() async {
       await tester.pump();
