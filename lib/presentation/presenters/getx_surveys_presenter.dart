@@ -49,6 +49,6 @@ class GetxSurveysPresenter extends GetxController with LoadingManager, SessionMa
   }
 
   void goToSurveyResult(String surveyId) {
-    _navigateTo.value = '/survey_result/$surveyId';
+    _navigateTo.subject.add('/survey_result/$surveyId');
   }
 }
