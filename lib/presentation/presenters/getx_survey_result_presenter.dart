@@ -8,6 +8,8 @@ import '../../domain/usecases/usecases.dart';
 import '../../ui/helpers/helpers.dart';
 import '../../ui/pages/pages.dart';
 
+import '../helpers/helpers.dart';
+
 class GetxSurveyResultPresenter extends GetxController implements SurveyResultPresenter {
   final LoadSurveyResult loadSurveyResult;
   final SaveSurveyResult saveSurveyResult;
@@ -37,20 +39,7 @@ class GetxSurveyResultPresenter extends GetxController implements SurveyResultPr
     try {
       final surveyResult = await action();
 
-      _surveyResult.value = SurveyResultViewModel(
-        surveyId: surveyResult.surveyId,
-        question: surveyResult.question,
-        answers: surveyResult.answers
-            .map(
-              (answer) => SurveyAnswerViewModel(
-                image: answer.image,
-                answer: answer.answer,
-                isCurrentAnswered: answer.isCurrentAnswered,
-                percent: '${answer.percent}%',
-              ),
-            )
-            .toList(),
-      );
+      _surveyResult.value = surveyResult.toViewModel();
     } on DomainError catch (error) {
       if (error == DomainError.accessDenied) {
         _isSessionExpired.value = true;
