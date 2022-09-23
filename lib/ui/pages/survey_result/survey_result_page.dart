@@ -11,7 +11,7 @@ import 'survey_result_viewmodel.dart';
 class SurveyResultPage extends StatelessWidget with LoadingManager, SessionManager {
   final SurveyResultPresenter presenter;
 
-  const SurveyResultPage({@required this.presenter});
+  const SurveyResultPage({required this.presenter});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class SurveyResultPage extends StatelessWidget with LoadingManager, SessionManag
 
           presenter.loadData();
 
-          return StreamBuilder<SurveyResultViewModel>(
+          return StreamBuilder<SurveyResultViewModel?>(
             stream: presenter.surveyResultStream,
             builder: (context, snapshot) {
               if (snapshot.hasError) {
@@ -32,7 +32,7 @@ class SurveyResultPage extends StatelessWidget with LoadingManager, SessionManag
               }
 
               if (snapshot.hasData) {
-                return SurveyResult(viewModel: snapshot.data, onSave: presenter.save);
+                return SurveyResult(viewModel: snapshot.data!, onSave: presenter.save);
               }
 
               return SizedBox(height: 0);

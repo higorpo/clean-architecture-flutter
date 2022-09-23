@@ -7,9 +7,8 @@ class SurveyAnswer extends StatelessWidget {
   final SurveyAnswerViewModel viewModel;
 
   const SurveyAnswer({
-    Key key,
-    @required this.viewModel,
-  }) : super(key: key);
+    required this.viewModel,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +22,7 @@ class SurveyAnswer extends StatelessWidget {
             children: [
               if (viewModel.image != null)
                 Image.network(
-                  viewModel.image,
+                  viewModel.image!,
                   width: 40,
                 ),
               Expanded(

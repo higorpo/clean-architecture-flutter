@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:meta/meta.dart';
 
 import '../../domain/entities/entities.dart';
 import '../../domain/helpers/helpers.dart';
@@ -16,20 +15,20 @@ class GetxSurveyResultPresenter extends GetxController implements SurveyResultPr
   final String surveyId;
 
   final _isLoading = true.obs;
-  final _surveyResult = Rx<SurveyResultViewModel>();
-  final _isSessionExpired = RxBool();
+  final _surveyResult = Rx<SurveyResultViewModel?>(null);
+  final _isSessionExpired = Rx<bool?>(null);
 
   Stream<bool> get isLoadingStream => _isLoading.stream;
-  Stream<SurveyResultViewModel> get surveyResultStream => _surveyResult.stream;
-  Stream<bool> get isSessionExpiredStream => _isSessionExpired.stream;
+  Stream<SurveyResultViewModel?> get surveyResultStream => _surveyResult.stream;
+  Stream<bool?> get isSessionExpiredStream => _isSessionExpired.stream;
 
-  GetxSurveyResultPresenter({@required this.loadSurveyResult, @required this.saveSurveyResult, @required this.surveyId});
+  GetxSurveyResultPresenter({required this.loadSurveyResult, required this.saveSurveyResult, required this.surveyId});
 
   Future<void> loadData() async {
     _showResultOnAction(() => loadSurveyResult.loadBySurvey(surveyId: surveyId));
   }
 
-  Future<void> save({@required String answer}) async {
+  Future<void> save({required String answer}) async {
     _showResultOnAction(() => saveSurveyResult.save(answer: answer));
   }
 

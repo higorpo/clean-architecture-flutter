@@ -32,7 +32,7 @@ class SignUpPage extends StatelessWidget with KeyboardManager, LoadingManager, U
                   Headline1(text: R.strings.addAccount),
                   Padding(
                     padding: const EdgeInsets.all(32),
-                    child: Provider(
+                    child: ListenableProvider(
                       create: (_) => presenter,
                       child: Form(
                         child: Column(
@@ -46,7 +46,7 @@ class SignUpPage extends StatelessWidget with KeyboardManager, LoadingManager, U
                             PasswordConfirmationInput(),
                             SizedBox(height: 40),
                             SignUpButton(),
-                            FlatButton.icon(
+                            TextButton.icon(
                               onPressed: presenter.goToLogin,
                               icon: Icon(Icons.exit_to_app),
                               label: Text(R.strings.login),

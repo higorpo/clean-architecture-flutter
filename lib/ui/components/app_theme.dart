@@ -13,7 +13,6 @@ ThemeData makeAppTheme() {
     primaryColor: primaryColor,
     primaryColorDark: primaryColorDark,
     primaryColorLight: primaryColorLight,
-    accentColor: primaryColor,
     backgroundColor: Colors.white,
     highlightColor: secondaryColor,
     secondaryHeaderColor: secondaryColorDark,
@@ -45,5 +44,6 @@ ThemeData makeAppTheme() {
     ),
     disabledColor: disabledColor,
     dividerColor: dividerColor,
+    colorScheme: ColorScheme.fromSwatch().copyWith(secondary: primaryColor),
   );
 }

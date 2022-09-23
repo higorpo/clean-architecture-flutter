@@ -1,26 +1,25 @@
-import 'package:faker/faker.dart';
 import 'package:test/test.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 
-import 'package:ForDev/domain/entities/entities.dart';
-import 'package:ForDev/domain/helpers/helpers.dart';
-import 'package:ForDev/domain/usecases/usecases.dart';
+import 'package:fordev/domain/entities/entities.dart';
+import 'package:fordev/domain/helpers/helpers.dart';
+import 'package:fordev/domain/usecases/usecases.dart';
 
-import 'package:ForDev/presentation/presenters/presenters.dart';
+import 'package:fordev/presentation/presenters/presenters.dart';
 
-import 'package:ForDev/ui/helpers/helpers.dart';
-import 'package:ForDev/ui/pages/pages.dart';
+import 'package:fordev/ui/helpers/helpers.dart';
+import 'package:fordev/ui/pages/pages.dart';
 
 import '../../mocks/mocks.dart';
 
 class LoadSurveysSpy extends Mock implements LoadSurveys {}
 
 void main() {
-  GetxSurveysPresenter sut;
-  LoadSurveysSpy loadSurveys;
-  List<SurveyEntity> surveys;
+  late GetxSurveysPresenter sut;
+  late LoadSurveysSpy loadSurveys;
+  late List<SurveyEntity> surveys;
 
-  PostExpectation mockLoadSurveysCall() => when(loadSurveys.load());
+  When mockLoadSurveysCall() => when(() => loadSurveys.load());
 
   void mockLoadSurveys(List<SurveyEntity> data) {
     surveys = data;
@@ -38,7 +37,7 @@ void main() {
   test('Should call LoadSurveys on loadData', () async {
     await sut.loadData();
 
-    verify(loadSurveys.load()).called(1);
+    verify(() => loadSurveys.load()).called(1);
   });
 
   test('Should emit correct events on success', () async {

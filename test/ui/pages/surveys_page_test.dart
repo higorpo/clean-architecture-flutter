@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 
-import 'package:ForDev/ui/helpers/helpers.dart';
-import 'package:ForDev/ui/pages/pages.dart';
+import 'package:fordev/ui/helpers/helpers.dart';
+import 'package:fordev/ui/pages/pages.dart';
 
 import '../../mocks/mocks.dart';
 import '../helpers/helpers.dart';
@@ -13,24 +13,24 @@ import '../helpers/helpers.dart';
 class SurveysPresenterSpy extends Mock implements SurveysPresenter {}
 
 void main() {
-  SurveysPresenterSpy presenter;
-  StreamController<bool> isLoadingController;
-  StreamController<List<SurveyViewModel>> surveysController;
-  StreamController<String> navigateToController;
-  StreamController<bool> isSessionExpiredController;
+  late SurveysPresenterSpy presenter;
+  late StreamController<bool> isLoadingController;
+  late StreamController<List<SurveyViewModel>> surveysController;
+  late StreamController<String?> navigateToController;
+  late StreamController<bool> isSessionExpiredController;
 
   void initStreams() {
     isLoadingController = StreamController<bool>();
     surveysController = StreamController<List<SurveyViewModel>>();
-    navigateToController = StreamController<String>();
+    navigateToController = StreamController<String?>();
     isSessionExpiredController = StreamController<bool>();
   }
 
   void mockStreams() {
-    when(presenter.isLoadingStream).thenAnswer((_) => isLoadingController.stream);
-    when(presenter.surveysStream).thenAnswer((_) => surveysController.stream);
-    when(presenter.navigateToStream).thenAnswer((_) => navigateToController.stream);
-    when(presenter.isSessionExpiredStream).thenAnswer((_) => isSessionExpiredController.stream);
+    when(() => presenter.isLoadingStream).thenAnswer((_) => isLoadingController.stream);
+    when(() => presenter.surveysStream).thenAnswer((_) => surveysController.stream);
+    when(() => presenter.navigateToStream).thenAnswer((_) => navigateToController.stream);
+    when(() => presenter.isSessionExpiredStream).thenAnswer((_) => isSessionExpiredController.stream);
   }
 
   void closeStreams() {
@@ -56,7 +56,7 @@ void main() {
   testWidgets('Should call LoadSurveys on page load', (WidgetTester tester) async {
     await loadPage(tester);
 
-    verify(presenter.loadData()).called(1);
+    verify(() => presenter.loadData()).called(1);
   });
 
   testWidgets('Should call LoadSurveys on page reload', (WidgetTester tester) async {
@@ -66,7 +66,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.pageBack();
 
-    verify(presenter.loadData()).called(2);
+    verify(() => presenter.loadData()).called(2);
   });
 
   testWidgets('Should handle loading correctly', (WidgetTester tester) async {
@@ -84,11 +84,7 @@ void main() {
 
     isLoadingController.add(true);
     await tester.pump();
-
-    isLoadingController.add(null);
-    await tester.pump();
-
-    expect(find.byType(CircularProgressIndicator), findsNothing);
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
   });
 
   testWidgets('Should present error if surveysStream fails', (WidgetTester tester) async {
@@ -125,7 +121,7 @@ void main() {
 
     await tester.tap(find.text('Recarregar'));
 
-    verify(presenter.loadData()).called(2);
+    verify(() => presenter.loadData()).called(2);
   });
 
   testWidgets('Should call goToSurveyResult on survey click', (WidgetTester tester) async {
@@ -137,7 +133,7 @@ void main() {
     await tester.tap(find.text('Question 1'));
     await tester.pump();
 
-    verify(presenter.goToSurveyResult('1')).called(1);
+    verify(() => presenter.goToSurveyResult('1')).called(1);
   });
 
   testWidgets('Should change page', (WidgetTester tester) async {
@@ -164,10 +160,6 @@ void main() {
     await loadPage(tester);
 
     isSessionExpiredController.add(false);
-    await tester.pump();
-    expect(currentRoute, '/surveys');
-
-    isSessionExpiredController.add(null);
     await tester.pump();
     expect(currentRoute, '/surveys');
   });

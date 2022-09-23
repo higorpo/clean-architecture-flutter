@@ -33,7 +33,7 @@
 //   Stream<bool> get isFormValidStream => _controller?.stream?.map((state) => state.isFormValid)?.distinct();
 //   Stream<bool> get isLoadingStream => _controller?.stream?.map((state) => state.isLoading)?.distinct();
 
-//   StreamLoginPresenter({@required this.validation, @required this.authentication});
+//   StreamLoginPresenter({required this.validation, required this.authentication});
 
 //   void dispose() {
 //     _controller?.close();

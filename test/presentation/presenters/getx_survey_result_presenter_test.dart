@@ -1,15 +1,15 @@
 import 'package:faker/faker.dart';
 import 'package:test/test.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 
-import 'package:ForDev/domain/entities/entities.dart';
-import 'package:ForDev/domain/helpers/helpers.dart';
-import 'package:ForDev/domain/usecases/usecases.dart';
+import 'package:fordev/domain/entities/entities.dart';
+import 'package:fordev/domain/helpers/helpers.dart';
+import 'package:fordev/domain/usecases/usecases.dart';
 
-import 'package:ForDev/presentation/presenters/presenters.dart';
+import 'package:fordev/presentation/presenters/presenters.dart';
 
-import 'package:ForDev/ui/helpers/helpers.dart';
-import 'package:ForDev/ui/pages/pages.dart';
+import 'package:fordev/ui/helpers/helpers.dart';
+import 'package:fordev/ui/pages/pages.dart';
 
 import '../../mocks/fake_survey_result_factory.dart';
 
@@ -18,15 +18,15 @@ class LoadSurveyResultSpy extends Mock implements LoadSurveyResult {}
 class SaveSurveyResultSpy extends Mock implements SaveSurveyResult {}
 
 void main() {
-  GetxSurveyResultPresenter sut;
-  LoadSurveyResult loadSurveyResult;
-  SaveSurveyResult saveSurveyResult;
-  SurveyResultEntity loadResult;
-  SurveyResultEntity saveResult;
-  String surveyId;
-  String answer;
+  late GetxSurveyResultPresenter sut;
+  late LoadSurveyResult loadSurveyResult;
+  late SaveSurveyResult saveSurveyResult;
+  late SurveyResultEntity loadResult;
+  late SurveyResultEntity saveResult;
+  late String surveyId;
+  late String answer;
 
-  PostExpectation mockLoadSurveyResultCall() => when(loadSurveyResult.loadBySurvey(surveyId: anyNamed('surveyId')));
+  When mockLoadSurveyResultCall() => when(() => loadSurveyResult.loadBySurvey(surveyId: any(named: 'surveyId')));
 
   void mockLoadSurveyResult(SurveyResultEntity data) {
     loadResult = data;
@@ -35,7 +35,7 @@ void main() {
 
   void mockLoadSurveyResultError(DomainError error) => mockLoadSurveyResultCall().thenThrow(error);
 
-  PostExpectation mockSaveSurveyResultCall() => when(saveSurveyResult.save(answer: anyNamed('answer')));
+  When mockSaveSurveyResultCall() => when(() => saveSurveyResult.save(answer: any(named: 'answer')));
 
   void mockSaveSurveyResult(SurveyResultEntity data) {
     saveResult = data;
@@ -80,7 +80,7 @@ void main() {
     test('Should call LoadSurveyResult on loadData', () async {
       await sut.loadData();
 
-      verify(loadSurveyResult.loadBySurvey(surveyId: surveyId)).called(1);
+      verify(() => loadSurveyResult.loadBySurvey(surveyId: surveyId)).called(1);
     });
 
     test('Should emit correct events on success', () async {
@@ -113,7 +113,7 @@ void main() {
     test('Should call SaveSurveyResult on save', () async {
       await sut.save(answer: answer);
 
-      verify(saveSurveyResult.save(answer: answer)).called(1);
+      verify(() => saveSurveyResult.save(answer: answer)).called(1);
     });
 
     test('Should emit correct events on success', () async {

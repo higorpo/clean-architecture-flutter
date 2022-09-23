@@ -1,25 +1,25 @@
-import 'package:ForDev/data/http/http.dart';
+import 'package:fordev/data/http/http.dart';
 import 'package:faker/faker.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
-import 'package:ForDev/domain/helpers/helpers.dart';
-import 'package:ForDev/domain/usecases/usecases.dart';
+import 'package:fordev/domain/helpers/helpers.dart';
+import 'package:fordev/domain/usecases/usecases.dart';
 
-import 'package:ForDev/data/usecases/usecases.dart';
+import 'package:fordev/data/usecases/usecases.dart';
 
 import '../../../mocks/mocks.dart';
 
 class HttpClientSpy extends Mock implements HttpClient {}
 
 void main() {
-  RemoteAuthentication sut;
-  HttpClientSpy httpClient;
-  String url;
-  AuthenticationParams params;
-  Map apiResult;
+  late RemoteAuthentication sut;
+  late HttpClientSpy httpClient;
+  late String url;
+  late AuthenticationParams params;
+  late Map apiResult;
 
-  PostExpectation mockRequest() => when(httpClient.request(url: anyNamed('url'), method: anyNamed('method'), body: anyNamed('body')));
+  When mockRequest() => when(() => httpClient.request(url: any(named: 'url'), method: any(named: 'method'), body: any(named: 'body')));
 
   void mockHttpData(Map data) {
     apiResult = data;
@@ -41,14 +41,14 @@ void main() {
   test('Should call HttpClient with correct values', () async {
     await sut.auth(params);
 
-    verify(httpClient.request(
-      url: url,
-      method: 'post',
-      body: {
-        'email': params.email,
-        'password': params.secret,
-      },
-    ));
+    verify(() => httpClient.request(
+          url: url,
+          method: 'post',
+          body: {
+            'email': params.email,
+            'password': params.secret,
+          },
+        ));
   });
 
   test('Should throw UnexpectedError if HttpClient returns 400', () async {

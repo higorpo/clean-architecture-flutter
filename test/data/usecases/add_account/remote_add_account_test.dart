@@ -1,25 +1,25 @@
-import 'package:ForDev/data/http/http.dart';
+import 'package:fordev/data/http/http.dart';
 import 'package:faker/faker.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
-import 'package:ForDev/domain/helpers/helpers.dart';
-import 'package:ForDev/domain/usecases/usecases.dart';
+import 'package:fordev/domain/helpers/helpers.dart';
+import 'package:fordev/domain/usecases/usecases.dart';
 
-import 'package:ForDev/data/usecases/usecases.dart';
+import 'package:fordev/data/usecases/usecases.dart';
 
 import '../../../mocks/mocks.dart';
 
 class HttpClientSpy extends Mock implements HttpClient {}
 
 void main() {
-  RemoteAddAccount sut;
-  HttpClientSpy httpClient;
-  String url;
-  AddAccountParams params;
-  Map apiResult;
+  late RemoteAddAccount sut;
+  late HttpClientSpy httpClient;
+  late String url;
+  late AddAccountParams params;
+  late Map apiResult;
 
-  PostExpectation mockRequest() => when(httpClient.request(url: anyNamed('url'), method: anyNamed('method'), body: anyNamed('body')));
+  When mockRequest() => when(() => httpClient.request(url: any(named: 'url'), method: any(named: 'method'), body: any(named: 'body')));
 
   void mockHttpData(Map data) {
     apiResult = data;
@@ -41,16 +41,16 @@ void main() {
   test('Should call HttpClient with correct values', () async {
     await sut.add(params);
 
-    verify(httpClient.request(
-      url: url,
-      method: 'post',
-      body: {
-        'name': params.name,
-        'email': params.email,
-        'password': params.password,
-        'passwordConfirmation': params.passwordConfirmation,
-      },
-    ));
+    verify(() => httpClient.request(
+          url: url,
+          method: 'post',
+          body: {
+            'name': params.name,
+            'email': params.email,
+            'password': params.password,
+            'passwordConfirmation': params.passwordConfirmation,
+          },
+        ));
   });
 
   test('Should throw UnexpectedError if HttpClient returns 400', () async {

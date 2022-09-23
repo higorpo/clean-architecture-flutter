@@ -13,7 +13,7 @@ import 'surveys_presenter.dart';
 class SurveysPage extends StatefulWidget {
   final SurveysPresenter presenter;
 
-  const SurveysPage({@required this.presenter});
+  const SurveysPage({required this.presenter});
 
   @override
   _SurveysPageState createState() => _SurveysPageState();
@@ -22,7 +22,7 @@ class SurveysPage extends StatefulWidget {
 class _SurveysPageState extends State<SurveysPage> with LoadingManager, NavigationManager, SessionManager, RouteAware {
   @override
   Widget build(BuildContext context) {
-    Get.find<RouteObserver>().subscribe(this, ModalRoute.of(context));
+    Get.find<RouteObserver>().subscribe(this, ModalRoute.of(context) as PageRoute);
 
     return Scaffold(
       appBar: AppBar(
@@ -43,9 +43,9 @@ class _SurveysPageState extends State<SurveysPage> with LoadingManager, Navigati
             }
 
             if (snapshot.hasData) {
-              return Provider(
+              return ListenableProvider(
                 create: (_) => widget.presenter,
-                child: SurveyItems(viewModels: snapshot.data),
+                child: SurveyItems(viewModels: snapshot.data!),
               );
             }
 

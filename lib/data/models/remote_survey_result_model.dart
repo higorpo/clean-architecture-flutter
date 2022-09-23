@@ -1,5 +1,3 @@
-import 'package:meta/meta.dart';
-
 import '../../domain/entities/entities.dart';
 
 import '../http/http.dart';
@@ -11,7 +9,7 @@ class RemoteSurveyResultModel {
   final String question;
   final List<RemoteSurveyAnswerModel> answers;
 
-  RemoteSurveyResultModel({@required this.surveyId, @required this.question, @required this.answers});
+  RemoteSurveyResultModel({required this.surveyId, required this.question, required this.answers});
 
   factory RemoteSurveyResultModel.fromJson(Map json) {
     if (!json.keys.toSet().containsAll(['surveyId', 'question', 'answers'])) {
